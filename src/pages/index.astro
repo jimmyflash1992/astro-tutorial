@@ -1,7 +1,23 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Greeting from "../components/Greeting";
 const pageTitle = "Home Page";
+const res = await fetch("https://lgnewsroundup.com/wp-json/wp/v2/posts");
+
+const posts = await res.json();
 ---
+
 <BaseLayout pageTitle={pageTitle}>
   <h2>My awesome blog subtitle</h2>
+  <Greeting client:load messages={["Hej", "Hallo", "Hola", "Habari"]} />
+  <h1>Astro + WordPress 🚀</h1>
+  {
+    posts.map((post) => (
+        <h2 set:html={post.title.rendered} />
+        <p set:html={post.content.rendered} />
+    ))
+  }
+
+
+
 </BaseLayout>
